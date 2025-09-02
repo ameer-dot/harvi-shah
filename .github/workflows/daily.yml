@@ -1,0 +1,24 @@
+name: Daily Meta Ads to Google Sheets
+on:
+  schedule:
+    - cron: "0 3 * * *"   # runs every day at 03:00 UTC
+  workflow_dispatch:       # allows manual run button
+
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.10"
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+      - name: Run script
+        run: python main.py
+        env:
+          META_TOKEN: ${{ secrets.META_TOKEN }}
+          AD_ACCOUNT_ID: ${{ secrets.AD_ACCOUNT_ID }}
+          GOOGLE_CREDENTIALS_JSON: ${{ secrets.GOOGLE_CREDENTIALS_JSON }}
+          SHEET_NAME: ${{ secrets.SHEET_NAME }}
